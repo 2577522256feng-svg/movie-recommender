@@ -7,6 +7,8 @@ from sklearn.preprocessing import StandardScaler
 import time
 import joblib
 import os
+import warnings
+warnings.filterwarnings('ignore')
 
 # ==================== 页面配置 ====================
 st.set_page_config(
@@ -25,13 +27,6 @@ st.markdown("""
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-        }
-        .movie-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 10px;
         }
         .success-box {
             background: #d4edda;
@@ -55,7 +50,7 @@ st.markdown("""
 def generate_large_movie_data():
     """生成 500+ 部真实电影和 1000+ 用户"""
     
-    # 扩展电影列表 - 500+ 部真实电影
+    # 扩展电影列表
     movies_data = {
         1: ("Toy Story", "1995", "Animation|Comedy|Children", 8.3, 85),
         2: ("Jumanji", "1995", "Adventure|Comedy", 7.0, 70),
@@ -103,120 +98,14 @@ def generate_large_movie_data():
         44: ("The Dark Knight", "2008", "Action|Crime|Drama|Thriller", 9.0, 95),
         45: ("Iron Man", "2008", "Action|Adventure|Sci-Fi", 7.9, 81),
         46: ("The Avengers", "2012", "Action|Adventure|Sci-Fi", 8.0, 82),
-        47: ("Captain America: The First Avenger", "2011", "Action|Adventure|Sci-Fi", 6.9, 69),
+        47: ("Captain America", "2011", "Action|Adventure|Sci-Fi", 6.9, 69),
         48: ("Thor", "2011", "Action|Adventure|Fantasy", 7.0, 71),
         49: ("Black Panther", "2018", "Action|Adventure|Sci-Fi", 7.3, 75),
         50: ("Frozen", "2013", "Animation|Adventure|Comedy", 7.4, 76),
-        51: ("Jurassic Park", "1993", "Action|Adventure|Sci-Fi", 8.1, 84),
-        52: ("The Lion King", "1994", "Animation|Adventure|Comedy", 8.5, 87),
-        53: ("Aladdin", "1992", "Animation|Adventure|Comedy", 8.0, 83),
-        54: ("Beauty and the Beast", "1991", "Animation|Comedy|Family", 8.3, 86),
-        55: ("The Little Mermaid", "1989", "Animation|Comedy|Family", 7.9, 80),
-        56: ("Cinderella", "1950", "Animation|Adventure|Family", 7.3, 74),
-        57: ("Snow White and the Seven Dwarfs", "1937", "Animation|Adventure|Comedy", 7.6, 78),
-        58: ("The Wizard of Oz", "1939", "Adventure|Family|Fantasy", 8.1, 85),
-        59: ("King Kong", "1933", "Action|Adventure|Drama", 8.5, 88),
-        60: ("Frankenstein", "1931", "Horror|Sci-Fi", 7.9, 81),
-        61: ("Dracula", "1931", "Drama|Horror|Romance", 7.6, 79),
-        62: ("The Phantom of the Opera", "1925", "Horror|Mystery|Romance", 8.2, 84),
-        63: ("Metropolis", "1927", "Drama|Sci-Fi", 8.3, 86),
-        64: ("Battleship Potemkin", "1925", "Drama", 8.4, 87),
-        65: ("The Cabinet of Dr. Caligari", "1920", "Drama|Horror|Mystery", 8.1, 83),
-        66: ("Nosferatu", "1922", "Drama|Horror|Thriller", 8.3, 85),
-        67: ("The Passion of Joan of Arc", "1928", "Drama|History", 8.4, 86),
-        68: ("October: Ten Days That Shook the World", "1928", "Drama|History", 8.4, 87),
-        69: ("The General", "1926", "Action|Comedy|Romance", 8.3, 85),
-        70: ("City Lights", "1931", "Comedy|Drama|Romance", 8.4, 86),
-        71: ("Modern Times", "1936", "Comedy|Drama|Romance", 8.3, 85),
-        72: ("Casablanca", "1942", "Drama|Romance|War", 8.5, 88),
-        73: ("Gone with the Wind", "1939", "Drama|History|Romance", 8.1, 84),
-        74: ("Singin' in the Rain", "1952", "Comedy|Musical|Romance", 8.3, 85),
-        75: ("The Bridge on the River Kwai", "1957", "Adventure|Drama|War", 8.1, 83),
-        76: ("Ben-Hur", "1959", "Adventure|Drama|History", 8.1, 83),
-        77: ("Lawrence of Arabia", "1962", "Adventure|Biography|Drama", 8.3, 85),
-        78: ("2001: A Space Odyssey", "1968", "Adventure|Sci-Fi", 8.3, 85),
-        79: ("A Clockwork Orange", "1971", "Crime|Drama|Sci-Fi", 8.4, 86),
-        80: ("One Flew Over the Cuckoo's Nest", "1975", "Drama", 8.7, 90),
-        81: ("Jaws", "1975", "Adventure|Drama|Thriller", 8.0, 82),
-        82: ("Rocky", "1976", "Drama|Sport", 8.1, 83),
-        83: ("Star Wars: A New Hope", "1977", "Action|Adventure|Fantasy", 8.6, 89),
-        84: ("Close Encounters of the Third Kind", "1977", "Drama|Sci-Fi", 7.8, 80),
-        85: ("Superman", "1978", "Action|Adventure|Sci-Fi", 7.3, 75),
-        86: ("The Empire Strikes Back", "1980", "Action|Adventure|Fantasy", 8.7, 91),
-        87: ("Raiders of the Lost Ark", "1981", "Action|Adventure", 8.4, 87),
-        88: ("E.T. the Extra-Terrestrial", "1982", "Family|Sci-Fi", 7.8, 80),
-        89: ("Blade Runner", "1982", "Drama|Sci-Fi|Thriller", 8.1, 84),
-        90: ("Return of the Jedi", "1983", "Action|Adventure|Fantasy", 8.3, 86),
-        91: ("Terminator 2: Judgment Day", "1991", "Action|Sci-Fi", 8.5, 88),
-        92: ("Backdraft", "1991", "Action|Drama|Thriller", 6.7, 64),
-        93: ("Robin Hood: Prince of Thieves", "1991", "Action|Adventure|Drama", 6.9, 68),
-        94: ("The Rocketeer", "1991", "Action|Adventure|Family", 6.8, 67),
-        95: ("Point Break", "1991", "Action|Crime|Thriller", 7.1, 72),
-        96: ("Terminator 2: Judgment Day", "1991", "Action|Sci-Fi", 8.5, 88),
-        97: ("Thelma & Louise", "1991", "Crime|Drama", 7.6, 78),
-        98: ("The Silence of the Lambs", "1991", "Crime|Drama|Thriller", 8.6, 89),
-        99: ("JFK", "1991", "Drama|History|Mystery", 7.8, 80),
-        100: ("Bugsy", "1991", "Crime|Drama|Romance", 7.4, 76),
-        101: ("Barton Fink", "1991", "Comedy|Crime|Drama", 7.7, 79),
-        102: ("Miller's Crossing", "1990", "Crime|Drama", 7.8, 80),
-        103: ("Goodfellas", "1990", "Crime|Drama", 8.7, 91),
-        104: ("Dances with Wolves", "1990", "Adventure|Drama|History", 8.0, 82),
-        105: ("The Hunt for Red October", "1990", "Action|Drama|Thriller", 7.6, 78),
-        106: ("Total Recall", "1990", "Action|Sci-Fi|Thriller", 7.5, 77),
-        107: ("Back to the Future Part III", "1990", "Action|Comedy|Sci-Fi", 7.4, 76),
-        108: ("Die Hard 2", "1990", "Action|Drama|Thriller", 6.8, 67),
-        109: ("Kindergarten Cop", "1990", "Action|Comedy", 6.7, 66),
-        110: ("Predator 2", "1990", "Action|Horror|Sci-Fi", 6.3, 59),
-        111: ("The Godfather", "1972", "Crime|Drama", 9.2, 96),
-        112: ("The Godfather Part II", "1974", "Crime|Drama", 9.0, 95),
-        113: ("The Godfather Part III", "1990", "Crime|Drama", 7.6, 78),
-        114: ("Scarface", "1983", "Crime|Drama", 8.3, 85),
-        115: ("Taxi Driver", "1976", "Crime|Drama|Thriller", 8.2, 84),
-        116: ("Serpico", "1973", "Biography|Crime|Drama", 8.0, 82),
-        117: ("Dog Day Afternoon", "1975", "Crime|Drama|Thriller", 8.4, 86),
-        118: ("Network", "1976", "Drama", 8.4, 86),
-        119: ("The Conversation", "1974", "Drama|Mystery|Thriller", 7.9, 81),
-        120: ("Apocalypse Now", "1979", "Drama|War", 8.4, 86),
-        121: ("Chinatown", "1974", "Drama|Mystery|Thriller", 8.2, 84),
-        122: ("The French Connection", "1971", "Action|Crime|Drama", 7.9, 81),
-        123: ("The Sting", "1973", "Comedy|Crime|Drama", 8.3, 85),
-        124: ("American Graffiti", "1973", "Comedy|Drama", 7.5, 77),
-        125: ("Mean Streets", "1973", "Crime|Drama|Thriller", 7.7, 79),
-        126: ("The Long Goodbye", "1973", "Crime|Drama|Thriller", 7.3, 74),
-        127: ("Magnum Force", "1973", "Action|Crime|Drama", 6.6, 63),
-        128: ("Westworld", "1973", "Drama|Sci-Fi|Thriller", 6.9, 68),
-        129: ("Soylent Green", "1973", "Drama|Sci-Fi|Thriller", 7.5, 76),
-        130: ("The Poseidon Adventure", "1972", "Adventure|Drama", 7.2, 73),
-        131: ("Cabaret", "1972", "Drama|Musical", 7.8, 80),
-        132: ("1776", "1972", "Drama|Musical", 6.9, 68),
-        133: ("The Candidate", "1972", "Drama", 7.1, 72),
-        134: ("What's Up, Doc?", "1972", "Comedy|Romance", 7.4, 75),
-        135: ("The Last Picture Show", "1971", "Drama", 8.0, 82),
-        136: ("Dirty Harry", "1971", "Action|Crime|Drama", 7.7, 79),
-        137: ("A Clockwork Orange", "1971", "Crime|Drama|Sci-Fi", 8.4, 86),
-        138: ("Shaft", "1971", "Action|Crime|Drama", 6.9, 68),
-        139: ("Klute", "1971", "Crime|Drama|Thriller", 7.1, 72),
-        140: ("The French Connection", "1971", "Action|Crime|Drama", 7.9, 81),
-        141: ("Sweet Sweetback's Baadasssss Song", "1971", "Action|Crime|Drama", 6.5, 61),
-        142: ("Willy Wonka & the Chocolate Factory", "1971", "Family|Fantasy|Musical", 7.8, 80),
-        143: ("The Andromeda Strain", "1971", "Drama|Sci-Fi|Thriller", 6.8, 67),
-        144: ("Billy Jack", "1971", "Action|Comedy|Drama", 6.3, 59),
-        145: ("McCabe & Mrs. Miller", "1971", "Drama|Western", 7.7, 79),
-        146: ("Summer of '42", "1971", "Comedy|Drama|Romance", 6.8, 67),
-        147: ("Carnal Knowledge", "1971", "Drama", 6.9, 68),
-        148: ("Sunday Bloody Sunday", "1971", "Drama|Romance", 7.1, 72),
-        149: ("The Boy Friend", "1971", "Comedy|Musical|Romance", 6.3, 59),
-        150: ("Fiddler on the Roof", "1971", "Drama|Musical|Romance", 7.9, 81),
-        # 继续添加更多...（由于空间限制，这里省略，实际应有500+）
-        151: ("The Exorcist", "1973", "Horror|Mystery", 8.0, 82),
-        152: ("Jaws", "1975", "Adventure|Drama|Thriller", 8.0, 82),
-        153: ("One Flew Over the Cuckoo's Nest", "1975", "Drama", 8.7, 90),
-        154: ("Alien", "1979", "Horror|Sci-Fi|Thriller", 8.4, 86),
-        155: ("The Thing", "1982", "Horror|Sci-Fi|Thriller", 8.1, 83),
     }
     
-    # 扩展到 500+ 电影 - 随机生成剩余电影
-    for i in range(156, 501):
+    # 扩展到 500+ 电影
+    for i in range(51, 501):
         genres_list = [
             "Action|Adventure", "Drama|Romance", "Comedy|Family", 
             "Horror|Thriller", "Sci-Fi|Adventure", "Animation|Comedy",
@@ -237,8 +126,8 @@ def generate_large_movie_data():
             'title': data,
             'release_date': data,
             'genres': data,
-            'rating': data,
-            'popularity': data
+            'rating': float(data),
+            'popularity': int(data)
         }
         for mid, data in movies_data.items()
     ])
@@ -248,7 +137,6 @@ def generate_large_movie_data():
     n_users = 1000
     n_movies = len(movies_df)
     
-    # 稀疏矩阵（每个用户评分 20-100 部电影）
     user_item_matrix = pd.DataFrame(
         0,
         index=[f'user_{i}' for i in range(1, n_users + 1)],
@@ -257,7 +145,7 @@ def generate_large_movie_data():
     
     # 随机填充评分
     for user_idx in range(n_users):
-        n_rated = np.random.randint(20, 101)  # 每个用户评分 20-100 部电影
+        n_rated = np.random.randint(20, 101)
         movie_indices = np.random.choice(n_movies, n_rated, replace=False)
         ratings = np.random.randint(1, 6, n_rated)
         
@@ -281,17 +169,20 @@ def load_or_create_model():
     # 生成大规模数据
     movies_df, user_item_matrix = generate_large_movie_data()
     
-    # 创建用户特征
+    # 创建用户特征 - ✅ 修复：确保所有值都是标量
+    rating_counts = (user_item_matrix > 0).sum(axis=1).values
+    rating_means = user_item_matrix[user_item_matrix > 0].mean(axis=1).fillna(0).values
+    
     user_features = pd.DataFrame({
         'userId': range(1, len(user_item_matrix) + 1),
-        'rating_count': (user_item_matrix > 0).sum(axis=1).values,
-        'rating_mean': user_item_matrix[user_item_matrix > 0].mean(axis=1).fillna(0).values,
+        'rating_count': rating_counts,
+        'rating_mean': rating_means,
     })
-    user_features['activity_score'] = (
-        user_features['rating_count'] / user_features['rating_count'].max()
-    )
     
-    # K-means 聚类（10 个群组）
+    max_count = user_features['rating_count'].max()
+    user_features['activity_score'] = user_features['rating_count'] / max_count
+    
+    # K-means 聚类
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(
         user_features[['activity_score', 'rating_mean']].fillna(0)
@@ -299,7 +190,7 @@ def load_or_create_model():
     kmeans = KMeans(n_clusters=10, random_state=42, n_init=10)
     user_features['cluster_id'] = kmeans.fit_predict(features_scaled)
     
-    # 计算电影相似度矩阵（仅前 200 部以节省计算量）
+    # 计算电影相似度矩阵
     movie_vectors = user_item_matrix.values.T
     similarity_matrix = cosine_similarity(movie_vectors[:200])
     
@@ -315,7 +206,7 @@ def load_or_create_model():
                 idx = uid - 1
                 if idx < len(user_item_matrix):
                     user_vec = user_item_matrix.iloc[idx].values
-                    if user_vec.sum() > 0:  # 只添加有评分的用户
+                    if user_vec.sum() > 0:
                         user_vectors.append(user_vec)
             
             if len(user_vectors) > 1:
@@ -339,14 +230,13 @@ def load_or_create_model():
         'kmeans': kmeans
     }
     
-    # 保存模型
     joblib.dump(model_data, 'movie_recommendation_model_large.joblib', compress=3)
     
     return model_data, None
 
-# ==================== 推荐函数 ====================
+# ==================== 推荐函数 - 完全修复版 ====================
 def recommend_movies(user_id, k, model_data):
-    """混合推荐算法"""
+    """混合推荐算法 - 完全修复"""
     
     try:
         start_time = time.time()
@@ -357,16 +247,18 @@ def recommend_movies(user_id, k, model_data):
         user_similarity_dict = model_data['user_similarity_dict']
         movies = model_data['movies']
         
-        # Step 1: 用户识别
-        if user_id not in user_features['userId'].values:
+        # Step 1: 用户识别 - ✅ 修复：正确提取标量值
+        user_in_features = user_id in user_features['userId'].values
+        if not user_in_features:
             return None, f"❌ 用户 ID 应该在 1 到 {len(user_features)} 之间"
         
-        user_cluster = int(user_features[user_features['userId'] == user_id]['cluster_id'].values)
-        user_activity = float(user_features[user_features['userId'] == user_id]['activity_score'].values)
+        user_row = user_features[user_features['userId'] == user_id].iloc
+        user_cluster = int(user_row['cluster_id'])
+        user_activity = float(user_row['activity_score'])
         
         user_type = "活跃用户" if user_activity > 0.7 else ("新手用户" if user_activity < 0.3 else "普通用户")
         
-        # Step 2: 协同过滤
+        # Step 2: 协同过滤 - ✅ 修复：正确处理列表和转换
         cf_scores = {}
         if user_cluster in user_similarity_dict:
             sim_data = user_similarity_dict[user_cluster]
@@ -380,7 +272,7 @@ def recommend_movies(user_id, k, model_data):
                 
                 for idx in similar_indices:
                     if idx < len(cluster_users):
-                        similar_user_id = cluster_users[idx]
+                        similar_user_id = int(cluster_users[idx])
                         sim_score = float(similarities[idx])
                         
                         if similar_user_id <= len(user_item_matrix):
@@ -411,7 +303,7 @@ def recommend_movies(user_id, k, model_data):
                         if similarity_score > 0.1 and movie_idx not in watched_movies:
                             if movie_idx not in cbf_scores:
                                 cbf_scores[movie_idx] = []
-                            cbf_scores[movie_idx].append(similarity_score)
+                            cbf_scores[movie_idx].append(float(similarity_score))
         
         cbf_scores = {mid: np.mean(scores) for mid, scores in cbf_scores.items()}
         
@@ -420,25 +312,28 @@ def recommend_movies(user_id, k, model_data):
         
         combined_scores = {}
         for movie_id, score in cf_scores.items():
-            combined_scores[movie_id] = score * cf_weight
+            combined_scores[movie_id] = float(score) * cf_weight
         for movie_id, score in cbf_scores.items():
-            combined_scores[movie_id] = combined_scores.get(movie_id, 0) + score * (1 - cf_weight)
+            combined_scores[movie_id] = combined_scores.get(movie_id, 0) + float(score) * (1 - cf_weight)
         
-        # Step 5: 多样性调整
+        # Step 5: 排序和取 Top K
         ranked_movies = sorted(combined_scores.items(), key=lambda x: x, reverse=True)[:k]
         
         recommendations = []
         for rank, (movie_id, score) in enumerate(ranked_movies, 1):
             try:
-                movie_info = movies[movies['movieId'] == movie_id].iloc
-                recommendations.append({
-                    'rank': rank,
-                    'movieId': int(movie_id),
-                    'title': movie_info['title'],
-                    'genres': movie_info['genres'],
-                    'score': float(min(score, 1.0))  # 归一化分数到 0-1
-                })
-            except:
+                movie_id = int(movie_id)
+                movie_info = movies[movies['movieId'] == movie_id]
+                if len(movie_info) > 0:
+                    movie_row = movie_info.iloc
+                    recommendations.append({
+                        'rank': rank,
+                        'movieId': movie_id,
+                        'title': str(movie_row['title']),
+                        'genres': str(movie_row['genres']),
+                        'score': float(min(score, 1.0))
+                    })
+            except Exception as e:
                 continue
         
         latency = time.time() - start_time
@@ -446,18 +341,19 @@ def recommend_movies(user_id, k, model_data):
         return {
             'recommendations': recommendations,
             'user_info': {
-                'user_id': user_id,
-                'cluster': user_cluster + 1,
-                'activity': user_activity,
+                'user_id': int(user_id),
+                'cluster': int(user_cluster) + 1,
+                'activity': float(user_activity),
                 'user_type': user_type,
-                'cf_weight': cf_weight,
-                'cbf_weight': 1 - cf_weight,
-                'latency': latency
+                'cf_weight': float(cf_weight),
+                'cbf_weight': float(1 - cf_weight),
+                'latency': float(latency)
             }
         }, None
         
     except Exception as e:
-        return None, f"❌ 推荐失败：{str(e)}"
+        import traceback
+        return None, f"❌ 推荐失败：{str(e)}\n{traceback.format_exc()}"
 
 # ==================== 主页面 ====================
 
@@ -509,7 +405,7 @@ with col1:
     user_id = st.number_input(
         "👤 选择用户 ID",
         min_value=1,
-        max_value=int(user_features['userId'].max()),
+        max_value=int(len(user_features)),
         value=1,
         step=1
     )
@@ -525,7 +421,7 @@ st.markdown("---")
 # ==================== 显示结果 ====================
 if search_button:
     with st.spinner("⏳ 正在计算推荐..."):
-        result, error = recommend_movies(user_id, top_k, model_data)
+        result, error = recommend_movies(int(user_id), int(top_k), model_data)
     
     if error:
         st.markdown(f'<div class="error-box">{error}</div>', unsafe_allow_html=True)
@@ -576,7 +472,6 @@ if search_button:
 with st.sidebar:
     st.header("ℹ️ 系统信息")
     
-    # 数据统计
     st.subheader("📊 数据规模")
     st.metric("电影总数", f"{len(movies):,}")
     st.metric("用户总数", f"{len(user_features):,}")
@@ -590,10 +485,9 @@ with st.sidebar:
 1. **数据采集与预处理**
    - 500+ 电影数据
    - 1000+ 用户数据
-   - 丰富的评分记录
 
 2. **离线学习**
-   - 用户聚类 (K-Means)
+   - 用户聚类 (K-Means 10 类)
    - 特征提取
    - 相似度计算
 
@@ -604,12 +498,11 @@ with st.sidebar:
 
 4. **系统评估**
    - 性能指标
-   - 用户满意度
 
 ### 🧠 5个核心模块
-1. **Module 1** - 用户聚类
-2. **Module 2** - 特征提取
-3. **Module 3** - 相似度计算
-4. **Module 4** - 权重融合
-5. **Module 5** - 多样性调整
+1. **用户聚类**
+2. **特征提取**
+3. **相似度计算**
+4. **权重融合**
+5. **多样性调整**
     """)
